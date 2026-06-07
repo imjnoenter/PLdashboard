@@ -30,9 +30,13 @@
     <header class="app-header">
       <div class="header-title">
         <span class="title-emoji">🌸</span>
-        <h1>Mulan P&amp;L</h1>
+        <h1 id="app-title" tabindex="0" role="button" aria-label="Tap to rename"><span id="app-title-text" class="app-title-text">Mulan P&amp;L</span></h1>
       </div>
       <div class="header-actions">
+        <div class="header-clock" id="header-clock">
+          <span class="clock-time" id="clock-time">--:--</span>
+          <span class="clock-date" id="clock-date">-- ----- ----</span>
+        </div>
         <button id="currency-toggle" class="currency-toggle" aria-label="Toggle currency">
           <span class="currency-track">
             <span class="currency-thumb">$</span>

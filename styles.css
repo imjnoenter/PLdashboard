@@ -187,6 +187,8 @@ input {
   display: flex;
   align-items: center;
   gap: 8px;
+  min-width: 0;
+  flex: 1;
 }
 
 .title-emoji {
@@ -199,16 +201,68 @@ input {
   margin: 0;
   font-size: 20px;
   font-weight: 700;
+  min-width: 0;
+  max-width: 100%;
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: clip;
+  cursor: pointer;
+  border-radius: 8px;
+  padding: 2px 4px;
+  margin: -2px -4px;
+  outline: none;
+  transition: background 0.15s ease;
+}
+.app-title-text {
   background: linear-gradient(135deg, var(--pink-deep), var(--lavender-deep));
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
+}
+.header-title h1:hover,
+.header-title h1:focus-visible {
+  background: var(--pink);
+}
+.header-title h1:hover .app-title-text,
+.header-title h1:focus-visible .app-title-text {
+  -webkit-text-fill-color: var(--pink-deep);
+}
+.header-title h1.editing {
+  background: var(--card-bg);
+  box-shadow: 0 0 0 2px var(--lavender-deep);
+  overflow-x: auto;
+  text-overflow: clip;
+}
+.header-title h1.editing .app-title-text {
+  -webkit-text-fill-color: var(--text);
 }
 
 .header-actions {
   display: flex;
   align-items: center;
   gap: 10px;
+}
+
+.header-clock {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  line-height: 1.2;
+}
+.clock-time {
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--text);
+  letter-spacing: 0.5px;
+}
+.clock-date {
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--text-soft);
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  white-space: nowrap;
 }
 
 .icon-btn {

@@ -345,6 +345,58 @@ async function boot() {
 }
 
 /* ============================================================
+   HEADER CLOCK
+   ============================================================ */
+function updateHeaderClock() {
+  const now = new Date();
+  document.getElementById('clock-time').textContent = `${pad2(now.getHours())}:${pad2(now.getMinutes())}`;
+  document.getElementById('clock-date').textContent =
+    `${pad2(now.getDate())} ${MONTH_NAMES[now.getMonth()].toUpperCase()} ${now.getFullYear()}`;
+}
+updateHeaderClock();
+setInterval(updateHeaderClock, 15000);
+
+/* ============================================================
+   EDITABLE APP TITLE
+   ============================================================ */
+const appTitleEl = document.getElementById('app-title');
+const appTitleTextEl = document.getElementById('app-title-text');
+const DEFAULT_APP_TITLE = appTitleTextEl.textContent.trim();
+appTitleTextEl.textContent = localStorage.getItem('mulan_app_title') || DEFAULT_APP_TITLE;
+
+function startEditingTitle() {
+  appTitleTextEl.contentEditable = 'true';
+  appTitleEl.classList.add('editing');
+  const range = document.createRange();
+  range.selectNodeContents(appTitleTextEl);
+  const sel = window.getSelection();
+  sel.removeAllRanges();
+  sel.addRange(range);
+  appTitleTextEl.focus();
+}
+
+function stopEditingTitle(save) {
+  appTitleTextEl.contentEditable = 'false';
+  appTitleEl.classList.remove('editing');
+  let next = appTitleTextEl.textContent.replace(/\s+/g, ' ').trim();
+  if (!save || !next) next = localStorage.getItem('mulan_app_title') || DEFAULT_APP_TITLE;
+  appTitleTextEl.textContent = next;
+  if (save && next !== DEFAULT_APP_TITLE) localStorage.setItem('mulan_app_title', next);
+  else if (save) localStorage.removeItem('mulan_app_title');
+}
+
+appTitleEl.addEventListener('click', () => {
+  if (appTitleTextEl.contentEditable !== 'true') startEditingTitle();
+});
+appTitleTextEl.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') { e.preventDefault(); stopEditingTitle(true); appTitleTextEl.blur(); }
+  else if (e.key === 'Escape') { e.preventDefault(); stopEditingTitle(false); appTitleTextEl.blur(); }
+});
+appTitleTextEl.addEventListener('blur', () => {
+  if (appTitleTextEl.contentEditable === 'true') stopEditingTitle(true);
+});
+
+/* ============================================================
    SHARED VIEW PIECES
    ============================================================ */
 function periodNavHTML(label) {
