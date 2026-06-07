@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, viewport-fit=cover" />
+  <meta name="theme-color" content="#fdf2f8" />
+  <title>Mulan P&amp;L</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- PIN gate -->
+  <div id="pin-screen" class="pin-screen">
+    <div class="pin-card">
+      <div class="pin-emoji">🔐</div>
+      <h1>Hi, Mulan! ✨</h1>
+      <p>Enter your PIN to unlock your dashboard</p>
+      <input id="pin-input" type="password" inputmode="numeric" autocomplete="off" placeholder="••••" maxlength="12" />
+      <button id="pin-submit" class="btn-primary">Unlock</button>
+      <p id="pin-error" class="pin-error"></p>
+    </div>
+  </div>
+
+  <!-- Main app -->
+  <div id="app" class="app hidden">
+
+    <header class="app-header">
+      <div class="header-title">
+        <span class="title-emoji">🌸</span>
+        <h1>Mulan P&amp;L</h1>
+      </div>
+      <div class="header-actions">
+        <button id="currency-toggle" class="currency-toggle" aria-label="Toggle currency">
+          <span class="currency-track">
+            <span class="currency-thumb">$</span>
+          </span>
+        </button>
+        <button id="settings-btn" class="icon-btn" aria-label="Settings">⚙️</button>
+      </div>
+    </header>
+
+    <nav class="tab-nav">
+      <button class="tab-btn active" data-tab="week">Week</button>
+      <button class="tab-btn" data-tab="month">Month</button>
+      <button class="tab-btn" data-tab="year">Year</button>
+      <button class="tab-btn" data-tab="alltime">All Time</button>
+    </nav>
+
+    <main id="content" class="content">
+      <!-- Views are rendered here by app.js -->
+    </main>
+
+  </div>
+
+  <!-- Entry modal -->
+  <div id="entry-modal" class="modal-overlay hidden">
+    <div class="modal-card">
+      <button class="modal-close" id="entry-close" aria-label="Close">✕</button>
+      <h2 id="entry-modal-title">Tuesday, Dec 2</h2>
+      <label for="entry-input" class="entry-label" id="entry-field-label">Daily P&amp;L</label>
+      <div class="entry-input-wrap">
+        <button type="button" id="entry-sign-toggle" class="sign-toggle positive" aria-label="Toggle profit or loss">+</button>
+        <span id="entry-currency-symbol" class="entry-symbol">$</span>
+        <input id="entry-input" type="number" inputmode="decimal" step="0.01" min="0" placeholder="e.g. 150" />
+      </div>
+      <div class="modal-actions">
+        <button id="entry-delete" class="btn-ghost">Clear</button>
+        <button id="entry-save" class="btn-primary">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Settings modal -->
+  <div id="settings-modal" class="modal-overlay hidden">
+    <div class="modal-card">
+      <button class="modal-close" id="settings-close" aria-label="Close">✕</button>
+      <h2>Settings ⚙️</h2>
+
+      <div class="settings-row">
+        <span>Currency</span>
+        <div class="settings-currency">
+          <button class="chip active" data-currency="USD">USD ($)</button>
+          <button class="chip" data-currency="THB">THB (฿)</button>
+        </div>
+      </div>
+
+      <div class="settings-row">
+        <span>Exchange rate</span>
+        <span id="fx-rate-label" class="fx-rate-label">1 USD = 35.00 ฿</span>
+      </div>
+      <div class="settings-row">
+        <span id="fx-updated-label" class="fx-updated-label">Using default rate</span>
+        <button id="fx-refresh" class="btn-ghost btn-small">Refresh rate ↻</button>
+      </div>
+
+      <hr class="settings-divider" />
+
+      <div class="settings-row">
+        <span>Change PIN</span>
+        <button id="change-pin-btn" class="btn-ghost btn-small">Change</button>
+      </div>
+      <div id="change-pin-form" class="change-pin-form-wrap hidden">
+        <p class="fx-updated-label">Update the PIN constant in your Code.gs first, redeploy, then enter the new PIN here to sync this device.</p>
+        <div class="change-pin-form">
+          <input id="new-pin-input" type="password" inputmode="numeric" placeholder="New PIN" maxlength="12" />
+          <button id="save-pin-btn" class="btn-primary btn-small">Save PIN</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading overlay -->
+  <div id="loading-overlay" class="loading-overlay hidden">
+    <div class="spinner"></div>
+    <p>Loading your data…</p>
+  </div>
+
+  <!-- Toast -->
+  <div id="toast" class="toast hidden"></div>
+
+  <!-- Confetti / particle canvas -->
+  <canvas id="particle-canvas" class="particle-canvas"></canvas>
+
+  <script src="app.js"></script>
+</body>
+</html>
