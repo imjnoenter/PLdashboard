@@ -40,6 +40,7 @@ const state = {
   fxUpdated: null,
   activeTab: 'week',
   offsets: { week: 0, month: 0, year: 0 },
+  calc: { equity: '', pnl: '', pct: '' },
 };
 
 /* ============================================================
@@ -663,11 +664,62 @@ function renderAllTimeView() {
   `;
 }
 
+function renderCalcView() {
+  return `
+    <div class="view">
+      <div class="period-nav"><span class="period-label">Calculator 🧮</span></div>
+      <div class="summary-card calc-card">
+        <label class="entry-label" for="calc-equity">Equity</label>
+        <div class="entry-input-wrap">
+          <span class="entry-symbol">$</span>
+          <input id="calc-equity" class="calc-input" type="number" inputmode="decimal" step="0.01" placeholder="e.g. 10000" value="${state.calc.equity}" />
+        </div>
+        <label class="entry-label" for="calc-pnl">P&amp;L</label>
+        <div class="entry-input-wrap">
+          <span class="entry-symbol">$</span>
+          <input id="calc-pnl" class="calc-input" type="number" inputmode="decimal" step="0.01" placeholder="e.g. 150" value="${state.calc.pnl}" />
+        </div>
+        <label class="entry-label" for="calc-pct">% P&amp;L</label>
+        <div class="entry-input-wrap">
+          <input id="calc-pct" class="calc-input" type="number" inputmode="decimal" step="0.01" placeholder="e.g. 1.5" value="${state.calc.pct}" />
+          <span class="entry-symbol">%</span>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function handleCalcInput(e) {
+  const id = e.target.id;
+  if (id !== 'calc-equity' && id !== 'calc-pnl' && id !== 'calc-pct') return;
+
+  const equityEl = document.getElementById('calc-equity');
+  const pnlEl = document.getElementById('calc-pnl');
+  const pctEl = document.getElementById('calc-pct');
+  const equity = parseFloat(equityEl.value);
+  const pnl = parseFloat(pnlEl.value);
+  const pct = parseFloat(pctEl.value);
+
+  if (id === 'calc-equity') {
+    if (!isNaN(equity) && !isNaN(pnl)) pctEl.value = equity ? (pnl / equity * 100).toFixed(2) : '';
+    else if (!isNaN(equity) && !isNaN(pct)) pnlEl.value = (equity * pct / 100).toFixed(2);
+  } else if (id === 'calc-pnl') {
+    if (!isNaN(equity) && !isNaN(pnl)) pctEl.value = equity ? (pnl / equity * 100).toFixed(2) : '';
+  } else if (id === 'calc-pct') {
+    if (!isNaN(equity) && !isNaN(pct)) pnlEl.value = (equity * pct / 100).toFixed(2);
+  }
+
+  state.calc.equity = equityEl.value;
+  state.calc.pnl = pnlEl.value;
+  state.calc.pct = pctEl.value;
+}
+
 function render() {
   const el = document.getElementById('content');
   if (state.activeTab === 'week') el.innerHTML = renderWeekView();
   else if (state.activeTab === 'month') el.innerHTML = renderMonthView();
   else if (state.activeTab === 'year') el.innerHTML = renderYearView();
+  else if (state.activeTab === 'calc') el.innerHTML = renderCalcView();
   else el.innerHTML = renderAllTimeView();
 }
 
@@ -926,6 +978,8 @@ document.getElementById('content').addEventListener('click', (e) => {
   const dayCard = e.target.closest('.day-card[data-editable="1"]');
   if (dayCard) { openEntryModal(dayCard.dataset.date); }
 });
+
+document.getElementById('content').addEventListener('input', handleCalcInput);
 
 document.getElementById('entry-close').addEventListener('click', () => hideModal('entry-modal'));
 document.getElementById('settings-close').addEventListener('click', () => hideModal('settings-modal'));

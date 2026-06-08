@@ -732,7 +732,8 @@ input {
   color: var(--loss);
 }
 
-#entry-input {
+#entry-input,
+.calc-input {
   flex: 1;
   border: none;
   outline: none;
@@ -741,6 +742,10 @@ input {
   padding: 12px 0;
   font-weight: 600;
   color: var(--text);
+}
+
+.calc-card .entry-input-wrap:last-child {
+  margin-bottom: 0;
 }
 
 .modal-actions {
